@@ -17,38 +17,17 @@ public class ProdutoController {
 	Scanner entrada = new Scanner(System.in);
 	Produto produto = new Produto(null, null, null, 0, Date);
 
-	public ProdutoController() throws SQLException {
-		Connection connection = new ConnectionFactory().recuperarConexao();
+	public ProdutoController(Connection connection) throws SQLException {
 		this.produtoDAO = new ProdutoDAO(connection);
 	}
 
-	public void InserirOferta() {
+	public void InserirOferta(Produto produto) {
 
-		try {
-			System.out.println("Insira o nome do produto: ");
-			produto.setNome(entrada.nextLine());
-//			entrada.nextLine();
-			System.out.println("Insira a descrição do produto: ");
-			produto.setDescricao(entrada.nextLine());
-			System.out.println("Insira o valor do desconto: ");
-			produto.setDesconto(entrada.useLocale(localeAmericano).nextDouble());
-
-			produto.setData_inicio(Date.valueOf(LocalDate.now()));
-
-			this.produtoDAO.inserirOrferta(produto);
-		} catch (InputMismatchException in) {
-			in.printStackTrace();
-			System.out.println("Dado não esperado para variavel");
-		} catch (NullPointerException nul) {
-			nul.printStackTrace();
-			System.out.println("Variavel Nula");
-		}
+		this.produtoDAO.inserirOrferta(produto);
 
 	}
 
-	public void buscaOfertaPorPalavra() {
-		System.out.println("Insira a palavra que você deseja buscar: ");
-		produto.setNome(entrada.nextLine());
+	public void buscaOfertaPorPalavra(Produto produto) {
 
 		List<Produto> listarBusca = this.produtoDAO.buscaOfertaPorPalavra(produto);
 
@@ -56,41 +35,27 @@ public class ProdutoController {
 
 	}
 
-	public void alterarOferta() throws SQLException {
+	public void alterarOferta(Produto produto) throws SQLException {
 
-		System.out.println("Insira o id que deseja alterar: ");
-		produto.setId(entrada.nextInt());
-		if (this.produtoDAO.validaId(produto.getId()) == true) {
-			entrada.nextLine();
-			System.out.println("Insira o nome do produto: ");
-			produto.setNome(entrada.nextLine());
-			System.out.println("Insira a descrição do produto: ");
-			produto.setDescricao(entrada.nextLine());
-			System.out.println("Insira o valor do desconto: ");
-			produto.setDesconto(entrada.useLocale(localeAmericano).nextDouble());
-			this.produtoDAO.alterarOferta(produto);
-		} else if (this.produtoDAO.validaId(produto.getId()) == false) {
-			InserirOferta();
-		}
-
+		this.produtoDAO.alterarOferta(produto);
 	}
 
-	public void excluiOferta() throws SQLException {
-		System.out.println("Insira o id que você deseja excluir:");
-		Integer id = entrada.nextInt();
-		if (this.produtoDAO.validaId(id) == true) {
-			this.produtoDAO.excluirOfertaPorId(id);
-		} else if (this.produtoDAO.validaId(id) == false) {
-			InserirOferta();
-		}
+	public void excluiOferta(Integer id) throws SQLException {
 
+		this.produtoDAO.excluirOfertaPorId(id);
 	}
 
 	public void listarProdutos() {
+
 		List<Produto> listar = this.produtoDAO.listarOfertas();
 
 		listar.stream().forEach(lista -> System.out.println(lista));
 
+	}
+	public boolean validaId(Integer id) throws SQLException {
+		boolean retorno =this.produtoDAO.validaId(id);
+		
+		return retorno;
 	}
 
 }

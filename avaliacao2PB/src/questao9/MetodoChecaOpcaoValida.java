@@ -5,7 +5,7 @@ public class MetodoChecaOpcaoValida {
 	public void MetodoChecaOpcaoValida(int opcao) {
 		if (opcao > 5 || opcao < 0) {
 
-			System.out.println("Opção não valida. \nInsira um opção que esteja no menu!");
+			System.out.println("Opção não valida \nInsira um opção que esteja no menu!\n");
 
 		} else {
 			System.out.println();

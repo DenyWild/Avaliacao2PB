@@ -8,10 +8,11 @@ public class Produto {
 	private Integer id;
 	private String nome;
 	private String descricao;
-	private double desconto;
+	private float desconto;
+	@DateTimeFormat
 	private Date data_inicio;
 
-	public Produto(Integer id, String nome, String descricao, double desconto, Date data_inicio) {
+	public Produto(Integer id, String nome, String descricao, float desconto, Date data_inicio) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -37,11 +38,11 @@ public class Produto {
 		this.descricao = descricao;
 	}
 
-	public double getDesconto() {
+	public float getDesconto() {
 		return desconto;
 	}
 
-	public void setDesconto(double desconto) {
+	public void setDesconto(float desconto) {
 		DecimalFormat df = new DecimalFormat("#,###.00");
 		df.format(desconto);
 		this.desconto = desconto;
