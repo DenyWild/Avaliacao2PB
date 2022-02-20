@@ -23,13 +23,13 @@ public class ProdutoController {
 
 	public void InserirOferta(Produto produto) {
 
-		this.produtoDAO.inserirOrferta(produto);
+		this.produtoDAO.inserirOferta(produto);
 
 	}
 
-	public void buscaOfertaPorPalavra(Produto produto) {
+	public void buscaOfertaPorPalavra(String nome) {
 
-		List<Produto> listarBusca = this.produtoDAO.buscaOfertaPorPalavra(produto);
+		List<Produto> listarBusca = this.produtoDAO.buscaOfertaPorPalavra(nome);
 
 		listarBusca.stream().forEach(contemPalavra -> System.out.println(contemPalavra));
 

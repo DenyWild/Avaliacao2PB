@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ProdutoDAO {
+public class ProdutoDAO implements MetodosDAO {
 
 	private Connection connection;
 
@@ -20,7 +20,7 @@ public class ProdutoDAO {
 
 	}
 
-	public void inserirOrferta(Produto produto) {
+	public void inserirOferta(Produto produto) {
 		String sql = " INSERT INTO produto (nome, descricao, desconto, data_inicio) VALUES ( ?, ?, ?, ? ) ";
 
 		try (PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -61,7 +61,7 @@ public class ProdutoDAO {
 
 		try (PreparedStatement pstm = connection.prepareStatement(sql)) {
 
-			try (ResultSet rst = pstm.executeQuery();) {
+			try (ResultSet rst = pstm.executeQuery()) {
 
 				while (rst.next()) {
 					Produto produto = new Produto(rst.getInt(1), rst.getString(2), rst.getString(3), rst.getFloat(4),
@@ -80,23 +80,20 @@ public class ProdutoDAO {
 
 	}
 
-	// PRECISA TERMINAR
-	public List<Produto> buscaOfertaPorPalavra(Produto produto) {
+	public List<Produto> buscaOfertaPorPalavra(String nome) {
 
 		List<Produto> Ofertas = new ArrayList<Produto>();
 
-		String sql = " SELECT id, nome, descricao, desconto, data_inicio FROM produto WHERE nome LIKE '%'?'%' ";
+		String sql = " SELECT id, nome, descricao, desconto, data_inicio FROM produto WHERE nome LIKE ? ";
 
 		try (PreparedStatement pstm = connection.prepareStatement(sql)) {
 
-			pstm.setString(1, produto.getNome());
+			pstm.setString(1, "%" + nome + "%");
 
-			pstm.execute();
-
-			try (ResultSet rst = pstm.getResultSet()) {
+			try (ResultSet rst = pstm.executeQuery()) {
 
 				while (rst.next()) {
-					produto = new Produto(rst.getInt(1), rst.getString(2), rst.getString(3), rst.getFloat(4),
+					Produto produto = new Produto(rst.getInt(1), rst.getString(2), rst.getString(3), rst.getFloat(4),
 							rst.getDate(5));
 
 					Ofertas.add(produto);
@@ -115,25 +112,26 @@ public class ProdutoDAO {
 
 	public void alterarOferta(Produto produto) {
 
-		String sql = " UPDATE produto p SET p.nome = ?, p.descricao = ? , p.desconto = ?, p.data_inicio = ?  WHERE p.id = ? ";
+		String sql = " UPDATE produto SET nome = ?, descricao = ? , desconto = ?, data_inicio = ?  WHERE id = ? ";
 
-		try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+		try (PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			pstm.setString(1, produto.getNome());
 			pstm.setString(2, produto.getDescricao());
 			pstm.setFloat(3, produto.getDesconto());
 			pstm.setDate(4, Date.valueOf(LocalDate.now()));
 			pstm.setInt(5, produto.getId());
 
-			pstm.executeUpdate();
-			try (ResultSet rst = pstm.getResultSet()) {
+			pstm.execute();
+			try (ResultSet rst = pstm.getGeneratedKeys()) {
 
 				while (rst.next()) {
-					System.out.println("id alterado com sucesso.");
+					rst.getInt(1);
+					System.out.println("id alterado com sucesso");
 				}
 			}
 
 		} catch (SQLException e) {
-			throw new RuntimeException(e);
+
 		}
 
 	}
@@ -151,16 +149,16 @@ public class ProdutoDAO {
 	}
 
 	public boolean validaId(Integer id) throws SQLException {
-		String sql = "SELECT id FROM produto WHERE id = ?";
+		String sql = " SELECT id FROM produto WHERE id = ? ";
 
-		try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+		try (PreparedStatement pstm = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 			pstm.setInt(1, id);
 
 			pstm.execute();
 
-			try (ResultSet rst = pstm.getResultSet()) {
-				return rst.next();
-			}
+			ResultSet rst = pstm.executeQuery();
+			return rst.next();
+
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}

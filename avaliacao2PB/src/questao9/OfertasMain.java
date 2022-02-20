@@ -2,15 +2,14 @@ package questao9;
 
 import java.sql.SQLException;
 
-public class OpcoesOfertaMain {
+public class OfertasMain {
 
 	public static void main(String[] args) throws SQLException {
-		
-		MetodoOpcoes metodoParaEscolherOpcoes = new MetodoOpcoes();
-		
-		metodoParaEscolherOpcoes.MetodoOpcoes();
-		
-	}
 
+		MetodoOpcoes metodoParaEscolherOpcoes = new MetodoOpcoes();
+
+		metodoParaEscolherOpcoes.MetodoOpcoes();
+
+	}
 
 }

@@ -19,15 +19,16 @@ public class MetodoOpcoes {
 
 			do {
 				do {
-					System.out.println("-------SISTEMA DE OFERTAS--------");
-					System.out.println("Digite a opção desejada: ");
+					System.out.println("X-------SISTEMA DE OFERTAS--------X");
 					System.out.println("1 - para Inserir nova oferta");
 					System.out.println("2 - para alterar uma oferta");
-					System.out.println("3 - para Excluir uma nova oferta");
-					System.out.println("4 - para Listar ofertas contendo palavras: ");
+					System.out.println("3 - para deletar uma oferta");
+					System.out.println("4 - para Listar ofertas que contem a palavra");
 					System.out.println("5 - para Listar todas as ofertas");
 					System.out.println("0 - para SAIR");
-					System.out.println("Insira a opção:");
+					System.out.println("X---------------------------------X");
+					System.out.println("Insira a opção desejada:");
+
 					opcao = input.nextInt();
 					metodoValidaOpcao.MetodoChecaOpcaoValida(opcao);
 				}
@@ -46,7 +47,7 @@ public class MetodoOpcoes {
 					ligacaoEntreMetodoeController.excluirOferta();
 					break;
 				case 4:
-					ligacaoEntreMetodoeController.buscaOfertaPorPalavra();
+					ligacaoEntreMetodoeController.buscaOfertaContendoPalavra();
 					break;
 				case 5:
 					ligacaoEntreMetodoeController.listarProdutos();

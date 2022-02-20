@@ -23,12 +23,12 @@ public class LigacaoEntreMetodoeController {
 
 		try {
 			if (opcao > 1) {
-				System.out.println("Pressione Enter para iniciar a inserção");
+
 				entrada.nextLine();
-			} else if (opcao > 1 || opcao == 1) {
+			}
+			if (opcao > 1 || opcao == 1) {
 				System.out.println("Insira o nome do produto: ");
 				produto.setNome(entrada.nextLine());
-
 				System.out.println("Insira a descrição do produto: ");
 				produto.setDescricao(entrada.nextLine());
 				System.out.println("Insira o valor do desconto: ");
@@ -58,19 +58,22 @@ public class LigacaoEntreMetodoeController {
 
 	public void alterarOferta() throws SQLException {
 		int opcao = 2;
+		float desconto = 0;
 		System.out.println("Insira o id que deseja alterar: ");
 		produto.setId(entrada.nextInt());
 		if (this.produtoController.validaId(produto.getId()) == true) {
-			entrada.nextLine();
+			String a = entrada.nextLine();
 			System.out.println("Insira o nome do produto: ");
 			produto.setNome(entrada.nextLine());
 			System.out.println("Insira a descrição do produto: ");
 			produto.setDescricao(entrada.nextLine());
 			System.out.println("Insira o valor do desconto: ");
-			produto.setDesconto(entrada.useLocale(localeAmericano).nextFloat());
+			desconto = entrada.useLocale(localeAmericano).nextFloat();
+			produto.setDesconto(desconto);
+			produto.setData_inicio(Date.valueOf(LocalDate.now()));
 			this.produtoController.alterarOferta(produto);
 		} else if (this.produtoController.validaId(produto.getId()) == false) {
-			System.out.println("Voce precisa inserir o produto com o id inserido para poder alteralo");
+			System.out.println("É preciso inserir o produto com o id escolhido para poder altera-lo" + "\n");
 
 			inserirOferta(opcao);
 		}
@@ -83,6 +86,7 @@ public class LigacaoEntreMetodoeController {
 		if (this.produtoController.validaId(id) == true) {
 			this.produtoController.excluiOferta(id);
 		} else if (this.produtoController.validaId(id) == false) {
+			System.out.println("É preciso inserir o produto com o id escolhido para poder exclui-lo" + "\n");
 			inserirOferta(opcao);
 		}
 	}
@@ -91,11 +95,11 @@ public class LigacaoEntreMetodoeController {
 		this.produtoController.listarProdutos();
 	}
 
-	public void buscaOfertaPorPalavra() {
+	public void buscaOfertaContendoPalavra() {
 		System.out.println("Insira a palavra que você deseja buscar: ");
 		produto.setNome(entrada.nextLine());
 
-		this.produtoController.buscaOfertaPorPalavra(produto);
+		this.produtoController.buscaOfertaPorPalavra(produto.getNome());
 	}
 
 }
